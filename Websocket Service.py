@@ -19,7 +19,7 @@ def process_event():
 flaskThread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
 flaskThread.start()
 
-with connect("ws://192.168.178.27:80") as websocket:
+with connect("ws://192.168.0.103:80") as websocket:
     while True:
         websocket.send("Hello world!")
         while True:
