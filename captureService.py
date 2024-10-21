@@ -9,12 +9,21 @@ image_folder = "captured_images"
 if not os.path.exists(image_folder):
     os.makedirs(image_folder)
 
+#Neu
+cam = cv2.VideoCapture(0)
+    
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+
+for _ in range(5):
+    cam.read()
+
 @app.route('/capture', methods=['POST'])
 def capture_image():
-    cam = cv2.VideoCapture(0)
+    #cam = cv2.VideoCapture(0)
 
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
     ret,frame =cam.read()
 
