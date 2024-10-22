@@ -9,22 +9,19 @@ image_folder = "captured_images"
 if not os.path.exists(image_folder):
     os.makedirs(image_folder)
 
-#Neu
-cam = cv2.VideoCapture(0)
-    
+cam = cv2.VideoCapture(0) 
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
-for _ in range(5):
-    cam.read()
+if not cam.isOpened():
+    print("Could not open webcam.")
+else: 
+    print("Webcam successfully opened")
+
+ret, frame = cam.read()
 
 @app.route('/capture', methods=['POST'])
 def capture_image():
-    #cam = cv2.VideoCapture(0)
-
-    #cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-    #cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-
     ret,frame =cam.read()
 
     if not ret:
@@ -34,7 +31,6 @@ def capture_image():
     now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     image_path = os.path.join(image_folder, f"snapshot_{now}.jpg")
     cv2.imwrite(image_path, frame)
-    cam.release()
 
     return jsonify({"status": "success", "image_path": image_path}), 200
 
