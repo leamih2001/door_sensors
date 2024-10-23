@@ -41,6 +41,3 @@ def detect_faces():
     faces_coords = [{"x": int(x), "y": int(y), "w": int(w), "h": int(h)} for (x, y, w, h) in faces]
 
     return jsonify({"status": "success", "faces_detected": face_count, "faces": faces_coords}), 200
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
