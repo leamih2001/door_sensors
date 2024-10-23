@@ -31,8 +31,8 @@ def websocket_connect():
                 except TimeoutError:
                     if cv2.waitKey(1) == ord('q'):
                         break
-                continue
-            break
+                    continue
+                break
 
         # Receiving the message
         # Possible sent values from ESP: "ENTRY" or "EXIT"
