@@ -15,7 +15,7 @@ sensorStatus = "None"
 def process_event():
     global sensorStatus
     print(f"Returning status: {sensorStatus}")
-    return jsonify({"sensorStatus": "success", "result": tempsensorStatus}), 200
+    return jsonify({"sensorStatus": "success", "result": sensorStatus}), 200
        
 def websocket_connect():
     global sensorStatus
