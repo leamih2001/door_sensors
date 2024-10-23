@@ -30,4 +30,3 @@ The process engine coordinates the interactions between the services by querying
 6.2.1. Sensor data service: Implements communication via websockets with the ESP32 and provides a REST interface to query the sensor status
 6.2.2. Image acquisition service: Uses OpenCV to capture images and store them in the local file system
 6.2.3. Face Recognition Service: Processes the captured images and performs face recognition
-6.3. Threading: The Flask web server runs in parallel with the other processes that respond to sensor events and send the data to CPEE. By starting this Flask web server in a separate thread, the service can react asynchronously to the incoming sensor events and process requests in parallel
