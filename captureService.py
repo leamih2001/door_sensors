@@ -33,6 +33,3 @@ def capture_image():
     cv2.imwrite(image_path, frame)
 
     return jsonify({"status": "success", "image_path": image_path}), 200
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
