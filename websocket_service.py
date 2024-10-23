@@ -39,9 +39,5 @@ def websocket_connect():
         print(f"Received: {message}")
         sensorStatus = message
 
-        # Exit with 'q'/ STRG+C
-        if cv2.waitKey(1) == ord('q'):
-            break
-
 threading.Thread(target=websocket_connect, daemon=True).start()
 
