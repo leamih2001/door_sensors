@@ -9,25 +9,28 @@ sensorStatus = "None"
 
 app = Flask(__name__)
 
+sensorStatus = "None"
+
 @app.route('/checkSensor', methods=['POST'])
 def process_event():
     global sensorStatus
-    tempsensorStatus=sensorStatus
-    sensorStatus = "None"
+    print(f"Returning status: {sensorStatus}")
     return jsonify({"sensorStatus": "success", "result": tempsensorStatus}), 200
        
-flaskThread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
-flaskThread.start()
+def websocket_connect():
+    global sensorStatus
+    print ("Connecting to the websocket...")
 
-with connect("ws://192.168.0.103:80") as websocket:
-    while True:
-        websocket.send("Hello world!")
+    with connect("ws://192.168.0.103:80") as websocket:
+        print("Connected to websocket")
         while True:
-            try:
-                message = websocket.recv(timeout=1)
-            except TimeoutError:
-                if cv2.waitKey(1) == ord('q'):
-                    break
+            websocket.send("Hello world!")
+            while True:
+                try:
+                    message = websocket.recv(timeout=1)
+                except TimeoutError:
+                    if cv2.waitKey(1) == ord('q'):
+                        break
                 continue
             break
 
@@ -39,4 +42,6 @@ with connect("ws://192.168.0.103:80") as websocket:
         # Exit with 'q'/ STRG+C
         if cv2.waitKey(1) == ord('q'):
             break
+
+threading.Thread(target=websocket_connect, daemon=True).start()
 
