@@ -16,9 +16,7 @@ def process_event():
     global sensorStatus
     with status_lock:
         current_status = sensorStatus
-        if sensorStatus != "None":
-
-            sensorStatus = "None"
+        sensorStatus = "None"
 
     print(f"Returning status: {current_status}")
     return jsonify({"sensorStatus": "success", "result": current_status}), 200
