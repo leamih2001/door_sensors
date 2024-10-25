@@ -2,20 +2,26 @@ import cv2
 from websockets.sync.client import connect
 from datetime import datetime
 import threading
+import time
 
 from flask import Flask, request, jsonify
 
 sensorStatus = "None"
+status_lock = threading.Lock()
 
 app = Flask(__name__)
-
-sensorStatus = "None"
 
 @app.route('/checkSensor', methods=['POST'])
 def process_event():
     global sensorStatus
-    print(f"Returning status: {sensorStatus}")
-    return jsonify({"sensorStatus": "success", "result": sensorStatus}), 200
+    with status_lock:
+        current_status = sensorStatus
+        if sensorStatus != "None":
+
+            sensorStatus = "None"
+
+    print(f"Returning status: {current_status}")
+    return jsonify({"sensorStatus": "success", "result": current_status}), 200
        
 def websocket_connect():
     global sensorStatus
@@ -27,12 +33,25 @@ def websocket_connect():
             websocket.send("Hello world!")
             while True:
                 try:
-                    message = websocket.recv(timeout=1)
+                    message = websocket.recv()
+                    if message:
+                        print(f"Received: {message}")
+                        with status_lock:
+                            sensorStatus = message
+                        print(f"Sensorstatus updated to: {message}")
+                    else:
+                        print("Nothing received")
+
                 except TimeoutError:
                     if cv2.waitKey(1) == ord('q'):
                         break
                     continue
                 break
+
+                with status_lock:
+                    print(f"Sensorstatus: {sensorstatus}")
+
+                time.sleep(2)
 
         # Receiving the message
         # Possible sent values from ESP: "ENTRY" or "EXIT"
@@ -40,4 +59,3 @@ def websocket_connect():
         sensorStatus = message
 
 threading.Thread(target=websocket_connect, daemon=True).start()
-
